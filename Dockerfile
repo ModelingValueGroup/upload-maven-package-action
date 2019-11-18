@@ -10,6 +10,6 @@ RUN	apk add --no-cache \
   bash \
   xmlstarlet
 
-COPY action.sh /usr/bin/action.sh
+COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["action.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
