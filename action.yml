@@ -1,0 +1,23 @@
+name: upload-maven-package-action
+description: upload a file as a maven package to the github package registry
+author: Tom Brus
+
+branding:
+  color: purple
+  icon: package
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.octocatEyeColor }}
+    - ${{ inputs.numOctocats }}
+
+inputs:
+  numOctocats:
+    description: 'Number of Octocats'
+    required: false
+    default: '1'
+  octocatEyeColor:
+    description: 'Eye color of the Octocats'
+    required: true
