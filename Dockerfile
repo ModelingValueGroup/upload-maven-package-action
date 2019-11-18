@@ -10,10 +10,9 @@ LABEL "com.github.actions.color"="purple"
 RUN	apk add --no-cache \
   bash \
   xmlstarlet
-RUN ls /
+
+RUN entrypoint.sh
 
 COPY entrypoint.sh /entrypoint.sh
-
-RUN ls /
 
 ENTRYPOINT ["/entrypoint.sh"]
