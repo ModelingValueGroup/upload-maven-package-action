@@ -6,12 +6,18 @@ branding:
   color: purple
   icon: package
 
+#runs:
+#  using: docker
+#  image: Dockerfile
+#  args:
+#    - ${{ inputs.octocatEyeColor }}
+#    - ${{ inputs.numOctocats }}
+
 runs:
-  using: docker
-  image: Dockerfile
-  args:
-    - ${{ inputs.octocatEyeColor }}
-    - ${{ inputs.numOctocats }}
+  using: 'docker'
+  image: 'docker://alpine:3.10'
+  entrypoint: ./entrypoint.sh
+  args: ['aaaa', 'bbbb']
 
 inputs:
   numOctocats:
