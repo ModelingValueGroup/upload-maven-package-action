@@ -11,7 +11,7 @@ RUN	apk add --no-cache \
   bash \
   xmlstarlet
 
-RUN entrypoint.sh
+RUN ./entrypoint.sh
 
 COPY entrypoint.sh /entrypoint.sh
 
