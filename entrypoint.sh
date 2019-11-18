@@ -7,3 +7,4 @@ ls -l ~
 ls -l .
 pwd
 set
+exit 99

@@ -9,6 +9,7 @@ branding:
 runs:
   using: docker
   image: Dockerfile
+  entrypoint: 'entrypoint.sh'
   args:
     - ${{ inputs.octocatEyeColor }}
     - ${{ inputs.numOctocats }}
