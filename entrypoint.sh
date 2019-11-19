@@ -29,8 +29,8 @@ if [[ ! -f "$file" ]]; then
   exit 99
 fi
 
-mkdir -p ~/.m2
-cat > ~/.m2/settings.xml <<EOF
+mkdir -p $HOME/.m2
+cat > $HOME/.m2/settings.xml <<EOF
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <activeProfiles>
     <activeProfile>github</activeProfile>
@@ -66,6 +66,7 @@ cat > ~/.m2/settings.xml <<EOF
 EOF
 
 ls -ld ~
+ls -ld $HOME
 whoami
 mvn --version
 show "/usr/share/maven/conf/settings.xml"
