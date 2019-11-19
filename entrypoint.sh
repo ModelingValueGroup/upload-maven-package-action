@@ -14,6 +14,12 @@ export   repoName="$1"; shift
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 set
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "${token//4/x}"
+
+if [[ ! -f "$file" ]]; then
+  echo "PROBLEM: file not found: $file"
+  exit 99
+fi
 
 mkdir -p ~/.m2
 cat > ~/.m2/settings.xml <<EOF
