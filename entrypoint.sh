@@ -91,11 +91,10 @@ echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 gave2vars "$gave" "$file"
 generateSettings > settings.xml
-if [[ -f pom.xml ]]; then
-  mv pom.xml pom.xml-saved # move it out of the way, we have all the info extracted.
-fi
+#if [[ -f pom.xml ]]; then
+#  mv pom.xml pom.xml-saved # move it out of the way, we have all the info extracted.
+#fi
 mvn \
-  -X \
   -B \
   -s settings.xml \
   deploy:deploy-file \
