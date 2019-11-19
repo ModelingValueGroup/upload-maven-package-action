@@ -73,19 +73,23 @@ extractGaveFromPom() {
 }
 gave2vars() {
   local gave="$1"; shift
+  local file="$1"; shift
 
   if [[ $gave == "" ]]; then
     gave="$(extractGaveFromPom)"
   fi
   export g a v e
   IFS=: read g a v e <<<"$gave"
+  if [[ $e == "" ]]; then
+    e="${file##*.}"
+  fi
 }
 
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 set
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
-gave2vars "$gave"
+gave2vars "$gave" "$file"
 generateSettings > settings.xml
 if [[ -f pom.xml ]]; then
   mv pom.xml pom.xml-saved # move it out of the way, we have all the info extracted.
