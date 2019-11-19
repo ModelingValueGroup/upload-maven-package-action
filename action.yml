@@ -16,15 +16,18 @@ inputs:
   file:
     description: 'the file to upload'
     required: true
-  gave:
-    description: 'the group id, artifact id, version and extension(packaging), separated by colons (taken from pom if absent)'
-    required: false
   repoOwner:
     description: 'the owner of the repo to publish to'
     required: true
   repoName:
     description: 'the name of the repo to publish to'
     required: true
+  gave:
+    description: 'the group id, artifact id, version and extension(packaging), separated by colons (taken from pom if absent)'
+    required: false
+  pom:
+    description: 'the filename of the p[om.xml file (defaults to pom.xml'
+    required: false
 
 runs:
   using: 'docker'
@@ -33,6 +36,7 @@ runs:
     - ${{ inputs.token }}
     - ${{ inputs.tokenOwner }}
     - ${{ inputs.file }}
-    - ${{ inputs.gave }}
     - ${{ inputs.repoOwner }}
     - ${{ inputs.repoName }}
+    - ${{ inputs.gave }}
+    - ${{ inputs.pom }}

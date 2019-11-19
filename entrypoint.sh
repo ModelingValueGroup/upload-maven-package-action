@@ -6,23 +6,28 @@ set -o pipefail
 export      token="$1"; shift
 export tokenOwner="$1"; shift
 export       file="$1"; shift
-export       gave="$1"; shift
 export  repoOwner="$1"; shift
 export   repoName="$1"; shift
+export       gave="$1"; shift
+export        pom="$1"; shift
 ###################################################
 export packageUrl="https://maven.pkg.github.com/$repoOwner/$repoName"
 ###################################################
 
-if [[ ! -f "$file" ]]; then
-  echo "PROBLEM: file not found: $file"
-  exit 99
-fi
 if ! which mvn &>/dev/null; then
   echo "PROBLEM: mvn not installed"
   exit 99
 fi
 if ! which xmlstarlet &>/dev/null; then
   echo "PROBLEM: xmlstarlet not installed"
+  exit 99
+fi
+if [[ ! -f "$file" ]]; then
+  echo "PROBLEM: file not found: $file"
+  exit 99
+fi
+if [[ $pom != "" && ! -f "$pom" ]]; then
+  echo "PROBLEM: pom file not found: $pom"
   exit 99
 fi
 
@@ -63,20 +68,23 @@ generateSettings() {
 EOF
 }
 extractGaveFromPom() {
-  if [[ -f pom.xml ]]; then
+  local  pom="$1"; shift
+
+  if [[ -f "$pom" ]]; then
     printf "%s:%s:%s:%s" \
-      "$(xmlstarlet sel -t -v /_:project/_:groupId    <pom.xml)" \
-      "$(xmlstarlet sel -t -v /_:project/_:artifactId <pom.xml)" \
-      "$(xmlstarlet sel -t -v /_:project/_:version    <pom.xml)" \
-      "$(xmlstarlet sel -t -v /_:project/_:packaging  <pom.xml)"
+      "$(xmlstarlet sel -t -v /_:project/_:groupId    <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:artifactId <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:version    <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:packaging  <"$pom")"
   fi
 }
 gave2vars() {
   local gave="$1"; shift
   local file="$1"; shift
+  local  pom="$1"; shift
 
   if [[ $gave == "" ]]; then
-    gave="$(extractGaveFromPom)"
+    gave="$(extractGaveFromPom "$pom")"
   fi
   export g a v e
   IFS=: read g a v e <<<"$gave"
@@ -89,10 +97,13 @@ echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 set
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
-gave2vars "$gave" "$file"
+if [[ $pom == "" && -f pom.xml ]]; then
+  pom=pom.xml
+fi
+gave2vars "$gave" "$file" "$pom"
 generateSettings > settings.xml
-#if [[ -f pom.xml ]]; then
-#  mv pom.xml pom.xml-saved # move it out of the way, we have all the info extracted.
+#if [[ -f $pom ]]; then
+#  mv $pom $pom-saved # move it out of the way, we have all the info extracted.
 #fi
 mvn \
   -B \
@@ -104,5 +115,5 @@ mvn \
      -Dpackaging="$e" \
   -DrepositoryId="github" \
           -Dfile="$file" \
-       -DpomFile="pom.xml" \
+       -DpomFile="$pom" \
            -Durl="$packageUrl"
