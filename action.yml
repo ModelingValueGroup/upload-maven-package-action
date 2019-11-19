@@ -10,9 +10,6 @@ inputs:
   token:
     description: 'github token'
     required: true
-  tokenOwner:
-    description: 'github token owner'
-    required: true
   file:
     description: 'the file to upload'
     required: true

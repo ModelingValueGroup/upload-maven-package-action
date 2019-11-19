@@ -10,7 +10,6 @@ When gave can be taken from pom.xml:
         with:
           file: "tools.sh"
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tokenOwner: "your@email.address"
 ```
 Or when no pom is present:
 ```yaml
@@ -20,5 +19,4 @@ Or when no pom is present:
           file: "tools.sh"
           gave: "group:artifact:version:ext"
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tokenOwner: "your@email.address"
 ```

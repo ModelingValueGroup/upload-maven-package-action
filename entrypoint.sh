@@ -4,6 +4,7 @@ set -o pipefail
 
 ########################################################################################
 export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
+export   USERNAME="${GITHUB_REPOSITORY/\/*}"
 ########################################################################################
 main() {
   checkArgs
@@ -73,7 +74,7 @@ generateSettings() {
     <servers>
       <server>
         <id>github</id>
-        <username>$INPUT_TOKENOWNER</username>
+        <username>$USERNAME</username>
         <password>$INPUT_TOKEN</password>
       </server>
     </servers>
