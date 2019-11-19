@@ -5,17 +5,6 @@ set -o pipefail
 ########################################################################################
 export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
 ########################################################################################
-
-sed 's/..../&__A__/' <<<$ACTIONS_RUNTIME_TOKEN
-sed 's/..../&__B__/' <<<$INPUT_TOKEN
-if [[ "$ACTIONS_RUNTIME_TOKEN" == "$INPUT_TOKEN" ]]; then
-  echo "JAJAJAJAJA tokens equal"
-fi
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-set
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-
-########################################################################################
 main() {
   checkArgs
   if [[ $INPUT_POM == "" && -f pom.xml ]]; then
