@@ -7,17 +7,32 @@ branding:
   icon: 'package'
 
 inputs:
-  numOctocats:
-    description: 'Number of Octocats'
-    required: false
-    default: '1'
-  octocatEyeColor:
-    description: 'Eye color of the Octocats'
+  token:
+    description: 'github token'
+    required: true
+  tokenOwner:
+    description: 'github token owner'
+    required: true
+  file:
+    description: 'the file to upload'
+    required: true
+  gave:
+    description: 'the group id, artifact id, version and extension(packaging), separated by colons'
+    required: true
+  repoOwner:
+    description: 'the owner of the repo to publish to'
+    required: true
+  repoName:
+    description: 'the name of the repo to publish to'
     required: true
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.numOctocats }}
-    - ${{ inputs.octocatEyeColor }}
+    - ${{ inputs.token }}
+    - ${{ inputs.tokenOwner }}
+    - ${{ inputs.file }}
+    - ${{ inputs.gave }}
+    - ${{ inputs.repoOwner }}
+    - ${{ inputs.repoName }}

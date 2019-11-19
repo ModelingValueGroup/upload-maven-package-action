@@ -12,4 +12,4 @@ RUN	apk add --no-cache \
 
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ['/entrypoint.sh']
+ENTRYPOINT ["/entrypoint.sh"]
