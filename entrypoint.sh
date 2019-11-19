@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 set -o pipefail
 
 ###################################################
@@ -56,6 +56,7 @@ cat > ~/.m2/settings.xml <<EOF
   </servers>
 </settings>
 EOF
+sed 's/$/@@@ /' ~/.m2/settings.xml
 
 gave2vars() {
   local gave="$1"; shift
@@ -65,7 +66,8 @@ gave2vars() {
 }
 
 gave2vars "$gave"
-mvn -B \
+set -x
+mvn -X -B \
   deploy:deploy-file \
   -DgroupId="$g" \
   -DartifactId="$a" \
