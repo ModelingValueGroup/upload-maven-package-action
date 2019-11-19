@@ -15,6 +15,9 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN ls -l
 RUN pwd
-RUN /entrypoint.sh
+RUN ls -l ./entrypoint.sh
+RUN ls -l /entrypoint.sh
+RUN ls -l entrypoint.sh
+RUN ./entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
