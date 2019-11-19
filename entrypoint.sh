@@ -1,6 +1,6 @@
-#!/bin/bash -l
-#set -e
-#set -o pipefail
+#!/bin/bash
+set -e
+set -o pipefail
 
 echo ============================================
 for i in "$@"; do
