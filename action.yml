@@ -1,23 +1,16 @@
-name: 'upload-maven-package-action'
-description: 'upload a file as a maven package to the github package registry'
-author: 'Tom Brus'
-
-branding:
-  color: 'purple'
-  icon: 'package'
-
+# action.yml
+name: 'Hello World'
+description: 'Greet someone and record the time'
 inputs:
-  numOctocats:
-    description: 'Number of Octocats'
-    required: false
-    default: '1'
-  octocatEyeColor:
-    description: 'Eye color of the Octocats'
+  who-to-greet:  # id of input
+    description: 'Who to greet'
     required: true
-
+    default: 'World'
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.octocatEyeColor }}
-    - ${{ inputs.numOctocats }}
+    - ${{ inputs.who-to-greet }}
