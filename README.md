@@ -3,6 +3,7 @@ upload a file as a maven package to the github package registry
 
 ## Example Usage
 
+When gave can be taken from pom.xml:
 ```yaml
       - name: "Upload as package"
         uses: ModelingValueGroup/upload-maven-package-action@master
@@ -11,7 +12,7 @@ upload a file as a maven package to the github package registry
           token: "${{ secrets.GITHUB_TOKEN }}"
           tokenOwner: "your@email.address"
 ```
-or
+Or when no pom is present:
 ```yaml
       - name: "Upload as package"
         uses: ModelingValueGroup/upload-maven-package-action@master
