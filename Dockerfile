@@ -11,7 +11,7 @@ LABEL "com.github.actions.color"="purple"
 RUN apt-get update && apt-get install -y \
   bash \
   xmlstarlet \
-  mvn
+  maven
 
 COPY entrypoint.sh /entrypoint.sh
 
