@@ -20,7 +20,8 @@ COPY entrypoint.sh /entrypoint.sh
 #RUN ls -l /entrypoint.sh
 #RUN ls -l entrypoint.sh
 #RUN /bin/sh -c ./entrypoint.sh
-#RUN ./entrypoint.sh
+
+RUN cat /entrypoint.sh
 
 
 ENTRYPOINT ['bash', '-c', '/entrypoint.sh']
