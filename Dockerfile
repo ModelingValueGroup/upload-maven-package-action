@@ -8,11 +8,13 @@ LABEL "com.github.actions.description"="upload a file as a maven package to the 
 LABEL "com.github.actions.icon"="package"
 LABEL "com.github.actions.color"="purple"
 
-RUN	apk add --no-cache \
-  bash \
-  xmlstarlet
+#RUN	apk add --no-cache \
+#  bash \
+#  xmlstarlet
 
 #COPY entrypoint.sh /entrypoint.sh
+
+RUN apt-get install bash xmlstarlet
 ADD entrypoint.sh /entrypoint.sh
 
 RUN ls -l
