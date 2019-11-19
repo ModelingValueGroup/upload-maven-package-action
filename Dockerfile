@@ -1,6 +1,6 @@
 #FROM alpine:latest
-#FROM alpine:3.10
-FROM ubuntu:latest
+FROM alpine:3.10
+#FROM ubuntu:latest
 
 LABEL author="Tom Brus"
 LABEL "com.github.actions.name"="upload maven package"
@@ -14,7 +14,7 @@ LABEL "com.github.actions.color"="purple"
 
 #COPY entrypoint.sh /entrypoint.sh
 
-RUN apt-get install bash xmlstarlet
+#RUN apt-get install bash xmlstarlet
 ADD entrypoint.sh /entrypoint.sh
 
 RUN ls -l
