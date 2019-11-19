@@ -76,7 +76,7 @@ set -x
 mvn \
   -X \
   -B \
-  -S settings.xml \
+  -s settings.xml \
   deploy:deploy-file \
        -DgroupId="$g" \
     -DartifactId="$a" \
