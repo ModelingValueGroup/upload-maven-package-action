@@ -63,16 +63,18 @@ generateSettings() {
 EOF
 }
 extractGaveFromPom() {
-  printf "%s:%s:%s:%s" \
-    "$(xmlstarlet sel -t -v /_:project/_:groupId    <pom.xml)" \
-    "$(xmlstarlet sel -t -v /_:project/_:artifactId <pom.xml)" \
-    "$(xmlstarlet sel -t -v /_:project/_:version    <pom.xml)" \
-    "$(xmlstarlet sel -t -v /_:project/_:packaging  <pom.xml)"
+  if [[ -f pom.xml ]]; then
+    printf "%s:%s:%s:%s" \
+      "$(xmlstarlet sel -t -v /_:project/_:groupId    <pom.xml)" \
+      "$(xmlstarlet sel -t -v /_:project/_:artifactId <pom.xml)" \
+      "$(xmlstarlet sel -t -v /_:project/_:version    <pom.xml)" \
+      "$(xmlstarlet sel -t -v /_:project/_:packaging  <pom.xml)"
+  fi
 }
 gave2vars() {
   local gave="$1"; shift
 
-  if [[ -f pom.xml && $gave == "" ]]; then
+  if [[ $gave == "" ]]; then
     gave="$(extractGaveFromPom)"
   fi
   export g a v e
@@ -85,6 +87,9 @@ echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 gave2vars "$gave"
 generateSettings > settings.xml
+if [[ -f pom.xml ]]; then
+  mv pom.xml pom.xml-saved # move it out of the way, we have all the info extracted.
+fi
 mvn \
   -X \
   -B \
