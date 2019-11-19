@@ -20,7 +20,7 @@ show() {
 
   echo
   echo "@@@@@@@@@@@@@@@@@@@ BEGIN $f"
-  sed 's/^/@@@/' "$f"
+  sed 's/^/@@@/' "$f" || :
   echo "@@@@@@@@@@@@@@@@@@@ END   $f"
 }
 
@@ -65,6 +65,8 @@ cat > ~/.m2/settings.xml <<EOF
 </settings>
 EOF
 
+ls -ld ~
+whoami
 mvn --version
 show "/usr/share/maven/conf/settings.xml"
 show "/root/.m2/settings.xml"
