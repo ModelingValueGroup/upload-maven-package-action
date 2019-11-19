@@ -84,10 +84,11 @@ set
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
 gave2vars "$gave"
+generateSettings > settings.xml
 mvn \
   -X \
   -B \
-  -s <(generateSettings) \
+  -s settings.xml \
   deploy:deploy-file \
        -DgroupId="$g" \
     -DartifactId="$a" \
