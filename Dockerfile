@@ -1,6 +1,6 @@
 #FROM alpine:latest
 #FROM alpine:3.10
-FROM debian:9.5-slim
+FROM ubuntu:latest
 
 LABEL author="Tom Brus"
 LABEL "com.github.actions.name"="upload maven package"
