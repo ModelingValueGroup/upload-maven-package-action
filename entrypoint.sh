@@ -29,8 +29,7 @@ if [[ ! -f "$file" ]]; then
   exit 99
 fi
 
-mkdir -p $HOME/.m2
-cat > $HOME/.m2/settings.xml <<EOF
+cat > settings.xml <<EOF
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <activeProfiles>
     <activeProfile>github</activeProfile>
@@ -65,17 +64,6 @@ cat > $HOME/.m2/settings.xml <<EOF
 </settings>
 EOF
 
-ls -ld ~
-ls -ld $HOME
-whoami
-mvn --version
-show "/usr/share/maven/conf/settings.xml"
-show "/root/.m2/settings.xml"
-
-show "/usr/share/apache-maven-3.6.1/conf/settings.xml"
-show "/home/runner/.m2/settings.xml"
-
-
 gave2vars() {
   local gave="$1"; shift
 
@@ -85,12 +73,15 @@ gave2vars() {
 
 gave2vars "$gave"
 set -x
-mvn -X -B \
+mvn \
+  -X \
+  -B \
+  -S settings.xml \
   deploy:deploy-file \
-  -DgroupId="$g" \
-  -DartifactId="$a" \
-  -Dversion="$v" \
-  -Dpackaging="$e" \
+       -DgroupId="$g" \
+    -DartifactId="$a" \
+       -Dversion="$v" \
+     -Dpackaging="$e" \
   -DrepositoryId=github \
-  -Dfile="$file" \
-  -Durl="https://maven.pkg.github.com/$repoOwner/$repoName"
+          -Dfile="$file" \
+           -Durl="https://maven.pkg.github.com/$repoOwner/$repoName"
