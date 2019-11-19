@@ -59,7 +59,8 @@ gave2vars() {
 }
 
 gave2vars "$gave"
-mvn deploy:deploy-file \
+mvn -B \
+  deploy:deploy-file \
   -DgroupId="$g" \
   -DartifactId="$a" \
   -Dversion="$v" \
