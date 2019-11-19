@@ -1,5 +1,6 @@
 #FROM alpine:latest
-FROM alpine:3.10
+#FROM alpine:3.10
+FROM debian:9.5-slim
 
 LABEL author="Tom Brus"
 LABEL "com.github.actions.name"="upload maven package"
@@ -11,7 +12,8 @@ RUN	apk add --no-cache \
   bash \
   xmlstarlet
 
-COPY entrypoint.sh /entrypoint.sh
+#COPY entrypoint.sh /entrypoint.sh
+ADD entrypoint.sh /entrypoint.sh
 
 RUN ls -l
 RUN pwd
