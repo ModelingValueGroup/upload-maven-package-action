@@ -23,4 +23,4 @@ COPY entrypoint.sh /entrypoint.sh
 #RUN ./entrypoint.sh
 
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ['bash', '-c', '/entrypoint.sh']
