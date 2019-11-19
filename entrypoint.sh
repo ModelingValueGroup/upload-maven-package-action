@@ -14,7 +14,15 @@ export   repoName="$1"; shift
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 set
 echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-echo "${token//4/x}"
+
+show() {
+  local f="$1"; shift
+
+  echo
+  echo "@@@@@@@@@@@@@@@@@@@ BEGIN $f"
+  sed 's/^/@@@/' "$f"
+  echo "@@@@@@@@@@@@@@@@@@@ END   $f"
+}
 
 if [[ ! -f "$file" ]]; then
   echo "PROBLEM: file not found: $file"
@@ -56,7 +64,14 @@ cat > ~/.m2/settings.xml <<EOF
   </servers>
 </settings>
 EOF
-sed 's/$/@@@ /' ~/.m2/settings.xml
+
+mvn --version
+show "/usr/share/maven/conf/settings.xml"
+show "/root/.m2/settings.xml"
+
+show "/usr/share/apache-maven-3.6.1/conf/settings.xml"
+show "/home/runner/.m2/settings.xml"
+
 
 gave2vars() {
   local gave="$1"; shift
