@@ -16,12 +16,6 @@ inputs:
   file:
     description: 'the file to upload'
     required: true
-  repoOwner:
-    description: 'the owner of the repo to publish to'
-    required: true
-  repoName:
-    description: 'the name of the repo to publish to'
-    required: true
   gave:
     description: 'the group id, artifact id, version and extension(packaging), separated by colons (taken from pom if absent)'
     required: false
@@ -32,11 +26,3 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.token }}
-    - ${{ inputs.tokenOwner }}
-    - ${{ inputs.file }}
-    - ${{ inputs.repoOwner }}
-    - ${{ inputs.repoName }}
-    - ${{ inputs.gave }}
-    - ${{ inputs.pom }}

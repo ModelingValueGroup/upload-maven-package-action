@@ -2,35 +2,57 @@
 set -e
 set -o pipefail
 
-###################################################
-export      token="$1"; shift
-export tokenOwner="$1"; shift
-export       file="$1"; shift
-export  repoOwner="$1"; shift
-export   repoName="$1"; shift
-export       gave="$1"; shift
-export        pom="$1"; shift
-###################################################
-export packageUrl="https://maven.pkg.github.com/$repoOwner/$repoName"
-###################################################
+########################################################################################
+export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
+########################################################################################
 
-if ! which mvn &>/dev/null; then
-  echo "PROBLEM: mvn not installed"
-  exit 99
+if [[ "$ACTIONS_RUNTIME_TOKEN" == "$INPUT_TOKEN" ]]; then
+  echo "JAJAJAJAJA tokens equal"
 fi
-if ! which xmlstarlet &>/dev/null; then
-  echo "PROBLEM: xmlstarlet not installed"
-  exit 99
-fi
-if [[ ! -f "$file" ]]; then
-  echo "PROBLEM: file not found: $file"
-  exit 99
-fi
-if [[ $pom != "" && ! -f "$pom" ]]; then
-  echo "PROBLEM: pom file not found: $pom"
-  exit 99
-fi
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+set
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
+########################################################################################
+main() {
+  checkArgs
+  if [[ $INPUT_POM == "" && -f pom.xml ]]; then
+    INPUT_POM=pom.xml
+  fi
+  gave2vars "$INPUT_GAVE" "$INPUT_FILE" "$INPUT_POM"
+  generateSettings > settings.xml
+
+  mvn \
+    -B \
+    -s settings.xml \
+    deploy:deploy-file \
+         -DgroupId="$g" \
+      -DartifactId="$a" \
+         -Dversion="$v" \
+       -Dpackaging="$e" \
+    -DrepositoryId="github" \
+            -Dfile="$INPUT_FILE" \
+         -DpomFile="$INPUT_POM" \
+             -Durl="$packageUrl"
+}
+checkArgs() {
+  if ! command -v mvn &>/dev/null; then
+    echo "PROBLEM: mvn not installed"
+    exit 99
+  fi
+  if ! command -v xmlstarlet &>/dev/null; then
+    echo "PROBLEM: xmlstarlet not installed"
+    exit 99
+  fi
+  if [[ ! -f "$INPUT_FILE" ]]; then
+    echo "PROBLEM: file not found: $INPUT_FILE"
+    exit 99
+  fi
+  if [[ $INPUT_POM != "" && ! -f "$INPUT_POM" ]]; then
+    echo "PROBLEM: pom file not found: $INPUT_POM"
+    exit 99
+  fi
+}
 generateSettings() {
   cat  <<EOF
   <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
@@ -60,8 +82,8 @@ generateSettings() {
     <servers>
       <server>
         <id>github</id>
-        <username>$tokenOwner</username>
-        <password>$token</password>
+        <username>$INPUT_TOKENOWNER</username>
+        <password>$INPUT_TOKEN</password>
       </server>
     </servers>
   </settings>
@@ -87,33 +109,11 @@ gave2vars() {
     gave="$(extractGaveFromPom "$pom")"
   fi
   export g a v e
-  IFS=: read g a v e <<<"$gave"
+  IFS=: read -r g a v e <<<"$gave"
   if [[ $e == "" ]]; then
     e="${file##*.}"
   fi
 }
-
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-set
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-
-if [[ $pom == "" && -f pom.xml ]]; then
-  pom=pom.xml
-fi
-gave2vars "$gave" "$file" "$pom"
-generateSettings > settings.xml
-#if [[ -f $pom ]]; then
-#  mv $pom $pom-saved # move it out of the way, we have all the info extracted.
-#fi
-mvn \
-  -B \
-  -s settings.xml \
-  deploy:deploy-file \
-       -DgroupId="$g" \
-    -DartifactId="$a" \
-       -Dversion="$v" \
-     -Dpackaging="$e" \
-  -DrepositoryId="github" \
-          -Dfile="$file" \
-       -DpomFile="$pom" \
-           -Durl="$packageUrl"
+########################################################################################
+main
+########################################################################################
