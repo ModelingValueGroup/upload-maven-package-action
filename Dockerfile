@@ -1,4 +1,3 @@
-#FROM alpine:latest
 FROM alpine:3.10
 
 LABEL author="Tom Brus"
@@ -13,4 +12,4 @@ RUN	apk add --no-cache \
 
 COPY entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ['/entrypoint.sh']
+ENTRYPOINT ["/entrypoint.sh"]
