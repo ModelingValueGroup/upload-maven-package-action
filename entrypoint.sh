@@ -104,4 +104,5 @@ mvn \
      -Dpackaging="$e" \
   -DrepositoryId="github" \
           -Dfile="$file" \
+       -DpomFile="pom.xml" \
            -Durl="$packageUrl"
