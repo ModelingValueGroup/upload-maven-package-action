@@ -1,4 +1,5 @@
-FROM alpine:3.10
+#FROM alpine:3.10
+FROM ubuntu:latest
 
 LABEL author="Tom Brus"
 LABEL "com.github.actions.name"="upload maven package"
@@ -8,7 +9,8 @@ LABEL "com.github.actions.color"="purple"
 
 RUN	apk add --no-cache \
   bash \
-  xmlstarlet
+  xmlstarlet \
+  mvn
 
 COPY entrypoint.sh /entrypoint.sh
 
