@@ -80,17 +80,6 @@ generateSettings() {
   </settings>
 EOF
 }
-extractGaveFromPom() {
-  local  pom="$1"; shift
-
-  if [[ -f "$pom" ]]; then
-    printf "%s:%s:%s:%s" \
-      "$(xmlstarlet sel -t -v /_:project/_:groupId    <"$pom")" \
-      "$(xmlstarlet sel -t -v /_:project/_:artifactId <"$pom")" \
-      "$(xmlstarlet sel -t -v /_:project/_:version    <"$pom")" \
-      "$(xmlstarlet sel -t -v /_:project/_:packaging  <"$pom")"
-  fi
-}
 gave2vars() {
   local gave="$1"; shift
   local file="$1"; shift
@@ -103,6 +92,17 @@ gave2vars() {
   IFS=: read -r g a v e <<<"$gave"
   if [[ $e == "" ]]; then
     e="${file##*.}"
+  fi
+}
+extractGaveFromPom() {
+  local  pom="$1"; shift
+
+  if [[ -f "$pom" ]]; then
+    printf "%s:%s:%s:%s" \
+      "$(xmlstarlet sel -t -v /_:project/_:groupId    <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:artifactId <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:version    <"$pom")" \
+      "$(xmlstarlet sel -t -v /_:project/_:packaging  <"$pom")"
   fi
 }
 ########################################################################################
