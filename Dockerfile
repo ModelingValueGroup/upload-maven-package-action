@@ -1,8 +1,27 @@
-# Container image that runs your code
+#FROM alpine:latest
 FROM alpine:3.10
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
+LABEL author="Tom Brus"
+LABEL "com.github.actions.name"="upload maven package"
+LABEL "com.github.actions.description"="upload a file as a maven package to the github package registry"
+LABEL "com.github.actions.icon"="package"
+LABEL "com.github.actions.color"="purple"
+
+RUN	apk add --no-cache \
+  bash \
+  xmlstarlet
+
 COPY entrypoint.sh /entrypoint.sh
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+#RUN ls -l
+#RUN pwd
+#RUN which bash
+#RUN ls -l ./entrypoint.sh
+#RUN ls -l /entrypoint.sh
+#RUN ls -l entrypoint.sh
+#RUN /bin/sh -c ./entrypoint.sh
+
+RUN cat /entrypoint.sh
+
+
+ENTRYPOINT ['bash', '-c', '/entrypoint.sh']
