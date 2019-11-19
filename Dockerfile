@@ -13,14 +13,14 @@ RUN	apk add --no-cache \
 
 COPY entrypoint.sh /entrypoint.sh
 
-RUN ls -l
-RUN pwd
-RUN which bash
-RUN ls -l ./entrypoint.sh
-RUN ls -l /entrypoint.sh
-RUN ls -l entrypoint.sh
-RUN /bin/sh -c ./entrypoint.sh
-RUN ./entrypoint.sh
+#RUN ls -l
+#RUN pwd
+#RUN which bash
+#RUN ls -l ./entrypoint.sh
+#RUN ls -l /entrypoint.sh
+#RUN ls -l entrypoint.sh
+#RUN /bin/sh -c ./entrypoint.sh
+#RUN ./entrypoint.sh
 
 
 ENTRYPOINT ["/entrypoint.sh"]
