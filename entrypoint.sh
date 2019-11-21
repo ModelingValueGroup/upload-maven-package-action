@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 ########################################################################################
-export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
+export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
 export   USERNAME="${GITHUB_REPOSITORY/\/*}"
 export  REPOSNAME="${GITHUB_REPOSITORY/*\/}"
 ########################################################################################
