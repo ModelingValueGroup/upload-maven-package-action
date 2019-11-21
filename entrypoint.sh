@@ -15,7 +15,7 @@ main() {
   gave2vars "$INPUT_GAVE" "$INPUT_FILE" "$INPUT_POM"
 
   if listPackageVersions "$g" "$a" | fgrep -Fxq "$v"; then
-    echo "::error::version $v is already published as a package: [$(listPackageVersions "$g" "$a")]"
+    echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a")]"
   else
     generateSettings > settings.xml
 
@@ -94,7 +94,6 @@ graphqlQuery() {
   curl -s -H "Authorization: bearer $INPUT_TOKEN" -X POST -d '{"query":"'"$query"'"}' 'https://api.github.com/graphql'
 }
 listPackageVersions() {
-  set -x
   local g="$1"; shift
   local a="$1"; shift
 
@@ -114,9 +113,7 @@ query {
 }
 EOF
 )"
-  graphqlQuery "$query" 1>&2
   graphqlQuery "$query" | jq -r '.data.repository.registryPackages.nodes[0].versions.nodes[].version'
-  set +x
 }
 gave2vars() {
   local gave="$1"; shift
