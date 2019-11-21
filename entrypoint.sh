@@ -103,7 +103,7 @@ query {
     repository(owner:"$USERNAME", name:"$REPOSNAME"){
         registryPackages(name:"$g.$a",first:1) {
             nodes {
-                versions(last:999) {
+                versions(last:100) {
                     nodes {
                         version
                     }
