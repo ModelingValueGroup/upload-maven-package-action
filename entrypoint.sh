@@ -16,22 +16,23 @@ main() {
 
   if listPackageVersions "$g" "$a" | fgrep -Fxq "$v"; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a")]"
-  else
-    generateSettings > settings.xml
-
-    mvn \
-      -B \
-      -s settings.xml \
-      deploy:deploy-file \
-           -DgroupId="$g" \
-        -DartifactId="$a" \
-           -Dversion="$v" \
-         -Dpackaging="$e" \
-      -DrepositoryId="github" \
-              -Dfile="$INPUT_FILE" \
-           -DpomFile="$INPUT_POM" \
-               -Durl="$packageUrl"
+    exit 99
   fi
+
+  generateSettings > settings.xml
+
+  mvn \
+    -B \
+    -s settings.xml \
+    deploy:deploy-file \
+         -DgroupId="$g" \
+      -DartifactId="$a" \
+         -Dversion="$v" \
+       -Dpackaging="$e" \
+    -DrepositoryId="github" \
+            -Dfile="$INPUT_FILE" \
+         -DpomFile="$INPUT_POM" \
+             -Durl="$packageUrl"
 
 }
 checkArgs() {
