@@ -94,6 +94,7 @@ graphqlQuery() {
   curl -s -H "Authorization: bearer $INPUT_TOKEN" -X POST -d '{"query":"'"$query"'"}' 'https://api.github.com/graphql'
 }
 listPackageVersions() {
+  set -x
   local g="$1"; shift
   local a="$1"; shift
 
@@ -113,7 +114,9 @@ query {
 }
 EOF
 )"
+  graphqlQuery "$query" 1>&2
   graphqlQuery "$query" | jq -r '.data.repository.registryPackages.nodes[0].versions.nodes[].version'
+  set +x
 }
 gave2vars() {
   local gave="$1"; shift
