@@ -3,8 +3,9 @@ set -e
 set -o pipefail
 
 ########################################################################################
-export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
+export packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"packageUrl="https://maven.pkg.github.com/$GITHUB_REPOSITORY"
 export   USERNAME="${GITHUB_REPOSITORY/\/*}"
+export  REPOSNAME="${GITHUB_REPOSITORY/*\/}"
 ########################################################################################
 main() {
   checkArgs
@@ -12,20 +13,26 @@ main() {
     INPUT_POM=pom.xml
   fi
   gave2vars "$INPUT_GAVE" "$INPUT_FILE" "$INPUT_POM"
-  generateSettings > settings.xml
 
-  mvn \
-    -B \
-    -s settings.xml \
-    deploy:deploy-file \
-         -DgroupId="$g" \
-      -DartifactId="$a" \
-         -Dversion="$v" \
-       -Dpackaging="$e" \
-    -DrepositoryId="github" \
-            -Dfile="$INPUT_FILE" \
-         -DpomFile="$INPUT_POM" \
-             -Durl="$packageUrl"
+  if listPackageVersions "$g" "$a" | fgrep -Fxq "$v"; then
+    echo "::error::version $v is already published as a package: [$(listPackageVersions "$g" "$a")]"
+  else
+    generateSettings > settings.xml
+
+    mvn \
+      -B \
+      -s settings.xml \
+      deploy:deploy-file \
+           -DgroupId="$g" \
+        -DartifactId="$a" \
+           -Dversion="$v" \
+         -Dpackaging="$e" \
+      -DrepositoryId="github" \
+              -Dfile="$INPUT_FILE" \
+           -DpomFile="$INPUT_POM" \
+               -Durl="$packageUrl"
+  fi
+
 }
 checkArgs() {
   if ! command -v mvn &>/dev/null; then
@@ -80,6 +87,33 @@ generateSettings() {
     </servers>
   </settings>
 EOF
+}
+graphqlQuery() {
+  local query="$1"; shift
+
+  curl -s -H "Authorization: bearer $INPUT_TOKEN" -X POST -d '{"query":"'"$query"'"}' 'https://api.github.com/graphql'
+}
+listPackageVersions() {
+  local g="$1"; shift
+  local a="$1"; shift
+
+  local query="$(cat <<EOF | sed 's/"/\\"/g' | tr '\n\r' '  '
+query {
+    repository(owner:"$USERNAME", name:"$REPOSNAME"){
+        registryPackages(name:"$g.$a",first:1) {
+            nodes {
+                versions(last:9999) {
+                    nodes {
+                        version
+                    }
+                }
+            }
+        }
+    }
+}
+EOF
+)"
+  graphqlQuery "$query" | jq -r '.data.repository.registryPackages.nodes[0].versions.nodes[].version'
 }
 gave2vars() {
   local gave="$1"; shift
