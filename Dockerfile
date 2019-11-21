@@ -12,6 +12,7 @@ LABEL "com.github.actions.color"="purple"
 RUN	apk add --no-cache \
   bash \
   xmlstarlet \
+  jq \
   maven
 
 COPY entrypoint.sh /entrypoint.sh
