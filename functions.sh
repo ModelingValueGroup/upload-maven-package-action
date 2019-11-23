@@ -61,7 +61,12 @@ includeBuildTools() {
   local version="$1"; shift
 
   . <(curl -s -H "Authorization: bearer $token" -L "https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh" -o - \
-    |sed 's/fi#/fi #/') #TODO remove this sed cmd
+    |sed 's/fi#/fi #/') #TODO remove this
+
+export  GITHUB_REPOSITORY=${githubRepos:-??} #TODO remove this
+export GITHUB_PACKAGE_URL="https://maven.pkg.github.com/$GITHUB_REPOSITORY" #TODO remove this
+export           USERNAME="${GITHUB_REPOSITORY/\/*}" #TODO remove this
+export          REPOSNAME="${GITHUB_REPOSITORY/*\/}" #TODO remove this
 }
 
 
