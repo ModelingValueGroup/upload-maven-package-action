@@ -1,0 +1,21 @@
+name: test
+on:
+  push
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v1
+
+      - name: test
+        run: |
+          set
+          export DRY=echo
+          . functions.sh
+          main \
+            "$GITHUB_REPOSITORY" \
+            "${{ secrets.GITHUB_TOKEN }}" \
+            "README.md" \
+            "aa:bb:md:1.0" \
+            "noPom"
