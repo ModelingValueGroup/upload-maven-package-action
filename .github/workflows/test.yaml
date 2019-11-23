@@ -22,4 +22,4 @@ jobs:
             "${{ secrets.GITHUB_TOKEN }}" \
             "README.md" \
             "aa:bb:md:1.0" \
-            "noPom"
+            ""
