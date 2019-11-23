@@ -16,5 +16,6 @@ RUN	apk add --no-cache \
   maven
 
 COPY entrypoint.sh /entrypoint.sh
+COPY functions.sh  /functions.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
