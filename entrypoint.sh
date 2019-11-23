@@ -2,9 +2,9 @@
 set -e
 set -o pipefail
 
-ls -la
+ls -la /
 pwd
-. functions.sh
+. /functions.sh
 
 main \
   "$GITHUB_REPOSITORY" \
