@@ -60,5 +60,7 @@ includeBuildTools() {
   local   token="$1"; shift
   local version="$1"; shift
 
+curl -s -H "Authorization: bearer $token" -L "https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh" -o -
+
   . <(curl -s -H "Authorization: bearer $token" -L "https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh" -o -)
 }

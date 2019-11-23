@@ -10,9 +10,9 @@ jobs:
 
       - name: test
         run: |
-          set
+          set 1>&2
           export DRY=echo
-          . functions.sh
+          . functions.sh  1>&2
           main \
             "$GITHUB_REPOSITORY" \
             "${{ secrets.GITHUB_TOKEN }}" \
