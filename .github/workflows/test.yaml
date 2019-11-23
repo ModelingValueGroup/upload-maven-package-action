@@ -10,7 +10,11 @@ jobs:
 
       - name: test
         run: |
-          set 1>&2
+          sudo apt-get install -y \
+            bash \
+            xmlstarlet \
+            jq \
+            maven
           export DRY=echo
           . functions.sh  1>&2
           main \
