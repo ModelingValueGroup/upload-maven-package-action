@@ -2,6 +2,8 @@
 set -e
 set -o pipefail
 
+ls -la
+pwd
 . functions.sh
 
 main \
