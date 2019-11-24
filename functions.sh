@@ -3,18 +3,18 @@
 ########################################################################################
 ########################################################################################
 includeBuildTools() {
-  set -x
   local   token="$1"; shift
   local version="$1"; shift
 
   local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
 
-  echo "::group::include buildTools"
+  echo "::group::download buildTools"
   curl -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools.sh
-  sed 's/^/@@@ /' buildTools.sh
   echo "::endgroup::"
 
+  echo "::group::include buildTools"
   . buildTools.sh
+  echo "::endgroup::"
 }
 main() (
   local token="$1"; shift
