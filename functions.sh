@@ -3,21 +3,6 @@
 ########################################################################################
 ########################################################################################
 main() (
-  (
-    echo "::group:: debugging"
-    (
-      set -x
-      pwd
-      ls -la
-      df -h
-      echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-      ls -la "$GITHUB_WORKSPACE"
-      echo aap > "$GITHUB_WORKSPACE/aap" || :
-      ls -la "$GITHUB_WORKSPACE"
-    ) | sed 's/^/@@@ /'
-    echo "::endgroup::"
-  ) 1>&2  || : # TODO remove group, only for debug
-
   local githubRepos="$1"; shift
   local       token="$1"; shift
   local        file="$1"; shift
@@ -48,9 +33,10 @@ main() (
     pom=pom.xml
   fi
 
+  local g a v e
   gave2vars "$file" "$pom" "$gave"
 
-  if listPackageVersions "$g" "$a" "$token" | fgrep -Fxq "$v"; then
+  if listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token")]"
     exit 99
   fi
@@ -75,5 +61,8 @@ includeBuildTools() {
   local   token="$1"; shift
   local version="$1"; shift
 
-  . <(curl -s -H "Authorization: bearer $token" -L "https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh" -o - )
+  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
+
+  # shellcheck disable=SC1090
+  . <(curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o - )
 }

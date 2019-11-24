@@ -2,10 +2,6 @@ name: 'upload-maven-package-action'
 description: 'upload a file as a maven package to the github package registry'
 author: 'Tom Brus'
 
-branding:
-  color: 'purple'
-  icon: 'package'
-
 inputs:
   token:
     description: 'github token'
