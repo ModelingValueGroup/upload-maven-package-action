@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-ls -la /
-pwd
 . /functions.sh
 
 main \
