@@ -19,14 +19,7 @@ main() (
 
   includeBuildTools "$token" "1.0.6"
 
-  if ! command -v mvn &>/dev/null; then
-    echo "::error:: mvn not installed"
-    exit 99
-  fi
-  if ! command -v xmlstarlet &>/dev/null; then
-    echo "::error:: xmlstarlet not installed"
-    exit 99
-  fi
+  ### check arguments
   if [[ ! -f "$file" ]]; then
     echo "::error:: file not found: $file"
     exit 99
@@ -38,10 +31,13 @@ main() (
   if [[ $pom == "" && -f pom.xml ]]; then
     pom=pom.xml
   fi
+
+  ### check if this version is already uploaded
   if [[ "${DRY:-}" == "" ]] && listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | grep -Fx "$v" &> /dev/null; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
     exit 99
   fi
 
+  ### do the actual upload
   uploadArtifact "$token" "$gave" "$pom" "$file"
 )
