@@ -36,22 +36,7 @@ main() (
   local g a v e
   gave2vars "$file" "$pom" "$gave"
 
-(
-  set +ue
-  echo ==========
-  listPackageVersions "$g" "$a" "$token"
-  echo ==========
-  listPackageVersions "$g" "$a" "$token" | grep -Fx "$v"
-  echo $?
-  echo ==========
-  listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"
-  echo $?
-  echo ==========
-  listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v" && echo ja || echo nee
-  echo ==========
-) | sed 's/^/@@@ /' 1>&2 #TODO
-
-  if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; then
+  if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fx "$v" &> /dev/null; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token" | tr '\n' ',')]"
     exit 99
   fi
