@@ -33,3 +33,4 @@ jobs:
             echo "::error::    output  : $out"
             exit 44
           fi
+          echo "ok"
