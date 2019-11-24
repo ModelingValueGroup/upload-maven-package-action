@@ -8,14 +8,12 @@ includeBuildTools() {
 
   local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
 
-  curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools.sh
+  echo "::group::include buildTools"
+  curl -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools.sh
+  sed 's/^/@@@ /' buildTools.sh
+  echo "::endgroup::"
 
-  . buildTools.sh \
-    || (
-      echo "::error:: could not include buildTools"
-      sed 's/^/@@@ /' buildTools.sh
-      exit 45
-    )
+  . buildTools.sh
 }
 main() (
   local token="$1"; shift
