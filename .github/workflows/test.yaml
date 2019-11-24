@@ -10,11 +10,13 @@ jobs:
 
       - name: test
         run: |
+          echo "::group::installs"
           sudo apt-get install -y \
             bash \
             xmlstarlet \
             jq \
             maven
+          echo "::endgroup::installs"
           . functions.sh  1>&2
           exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=aa -DartifactId=bb -Dversion=md -Dpackaging=1.0 -DrepositoryId=github -Dfile=README.md -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
           out="$(DRY=echo main \
