@@ -18,16 +18,15 @@ jobs:
 
       - name: "test"
         run: |
-          set -x
           . functions.sh  1>&2
           echo "#dry" > dry.sh
           out="$(DRY=echo main \
             "ModelingValueGroup/buildTools" \
             "${{ secrets.GITHUB_TOKEN }}" \
             "dry.sh" \
-            "com.modelingvalue:buildTools:sh:0.0" \
+            "com.modelingvalue:buildTools:0.0:sh" \
             "")"
-          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=com.modelingvalue -DartifactId=buildTools -Dversion=0.0 -Dpackaging=sh0 -DrepositoryId=github -Dfile=buildTools.sh -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
+          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=com.modelingvalue -DartifactId=buildTools -Dversion=0.0 -Dpackaging=sh -DrepositoryId=github -Dfile=dry.sh -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/buildTools"
           if [[ "$out" != "$exp" ]]; then
             echo "::error::test failed"
             echo "::error::    expected: $exp"
