@@ -22,7 +22,6 @@ jobs:
           . functions.sh  1>&2
           echo "#dry" > dry.sh
           out="$(DRY=echo main \
-            "ModelingValueGroup/buildTools" \
             "${{ secrets.GITHUB_TOKEN }}" \
             "dry.sh" \
             "com.modelingvalue:buildTools:0.0:sh" \
