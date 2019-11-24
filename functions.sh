@@ -3,13 +3,15 @@
 ########################################################################################
 ########################################################################################
 main() (
-  echo "::group:: debugging" # TODO remove group, only for debug
   (
-    set -x
-    df -h
-    ls -la /mnt /mnt/* /run /run/*
-  ) | sed 's/^/@@@/' 1>&2
-  echo "::endgroup::"
+    echo "::group:: debugging" # TODO remove group, only for debug
+    (
+      set -x
+      df -h
+      ls -la /mnt /mnt/* /run /run/*
+    ) | sed 's/^/@@@ /'
+    echo "::endgroup::"
+  ) 1>&2
 
   local githubRepos="$1"; shift
   local       token="$1"; shift
