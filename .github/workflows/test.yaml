@@ -20,13 +20,13 @@ jobs:
         run: |
           set -euo pipefail
           . functions.sh  1>&2
-          echo "#dry" > dry.sh
+          echo "#dry" > dry.pack
           out="$(DRY=echo main \
             "${{ secrets.GITHUB_TOKEN }}" \
-            "dry.sh" \
-            "com.modelingvalue:buildTools:0.0:sh" \
+            "dry.pack" \
+            "mygroup:myartifact:0.0:pack" \
             "")"
-          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=com.modelingvalue -DartifactId=buildTools -Dversion=0.0 -Dpackaging=sh -DrepositoryId=github -Dfile=dry.sh -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/buildTools"
+          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=mygroup -DartifactId=myartifact -Dversion=0.0 -Dpackaging=pack -DrepositoryId=github -Dfile=dry.pack -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
           if [[ "$out" != "$exp" ]]; then
             echo "::error::test failed"
             echo "::error::    expected: $exp"
