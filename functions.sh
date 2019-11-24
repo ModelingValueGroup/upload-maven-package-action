@@ -37,7 +37,7 @@ main() (
   gave2vars "$file" "$pom" "$gave"
 
   if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fx "$v" &> /dev/null; then
-    echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token" | tr '\n' ',')]"
+    echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token" | tr '\n' ',' | sed 's/,/, /')]"
     exit 99
   fi
 
