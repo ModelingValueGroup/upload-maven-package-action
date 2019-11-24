@@ -18,12 +18,12 @@ jobs:
             maven
           echo "::endgroup::installs"
           . functions.sh  1>&2
-          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=aa -DartifactId=bb -Dversion=md -Dpackaging=1.0 -DrepositoryId=github -Dfile=README.md -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
+          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=com.modelingvalue -DartifactId=buildTools -Dversion=0.0 -Dpackaging=sh0 -DrepositoryId=github -Dfile=buildTools.sh -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
           out="$(DRY=echo main \
-            "$GITHUB_REPOSITORY" \
+            "ModelingValueGroup/buildTools" \
             "${{ secrets.GITHUB_TOKEN }}" \
-            "README.md" \
-            "aa:bb:md:1.0" \
+            "buildTools.sh" \
+            "com.modelingvalue:buildTools:sh:0.0" \
             "")"
           if [[ "$out" != "$exp" ]]; then
             echo "::error::test failed"
