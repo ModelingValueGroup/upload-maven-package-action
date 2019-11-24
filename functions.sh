@@ -3,7 +3,10 @@
 ########################################################################################
 ########################################################################################
 main() (
-  df -h | sed 's/^/@@@/' # TODO remove, only for debug
+  (
+    df -h
+    ls -la /mnt /mnt/*
+  ) | sed 's/^/@@@/' 1>&2 # TODO remove, only for debug
   local githubRepos="$1"; shift
   local       token="$1"; shift
   local        file="$1"; shift
