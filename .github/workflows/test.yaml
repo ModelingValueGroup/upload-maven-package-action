@@ -18,6 +18,8 @@ jobs:
 
       - name: "test"
         run: |
+          set -e
+          set -o pipefail
           . functions.sh  1>&2
           echo "#dry" > dry.sh
           out="$(DRY=echo main \
