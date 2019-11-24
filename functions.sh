@@ -2,16 +2,22 @@
 
 ########################################################################################
 ########################################################################################
+includeBuildTools() {
+  local   token="$1"; shift
+  local version="$1"; shift
+
+  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
+
+  # shellcheck disable=SC1090
+  . <(curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o - )
+}
 main() (
-  local githubRepos="$1"; shift
-  local       token="$1"; shift
-  local        file="$1"; shift
-  local        gave="$1"; shift
-  local         pom="$1"; shift
+  local token="$1"; shift
+  local  file="$1"; shift
+  local  gave="$1"; shift
+  local   pom="$1"; shift
 
-  includeBuildTools "$token" "1.0.5"
-
-  local githubPackageUrl="https://maven.pkg.github.com/$githubRepos"
+  includeBuildTools "$token" "1.0.6"
 
   if ! command -v mvn &>/dev/null; then
     echo "::error:: mvn not installed"
@@ -32,37 +38,10 @@ main() (
   if [[ $pom == "" && -f pom.xml ]]; then
     pom=pom.xml
   fi
-
-  local g a v e
-  gave2vars "$file" "$pom" "$gave"
-
-  if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fx "$v" &> /dev/null; then
-    echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
+  if [[ "${DRY:-}" == "" ]] && listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | grep -Fx "$v" &> /dev/null; then
+    echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
     exit 99
   fi
 
-  generateMavenSettings "$token"> settings.xml
-
-  ${DRY:-} mvn \
-    -B \
-    -s settings.xml \
-    deploy:deploy-file \
-         -DgroupId="$g" \
-      -DartifactId="$a" \
-         -Dversion="$v" \
-       -Dpackaging="$e" \
-    -DrepositoryId="github" \
-            -Dfile="$file" \
-         -DpomFile="$pom" \
-             -Durl="$githubPackageUrl"
-
+  uploadArtifact "$token" "$gave" "$pom" "$file"
 )
-includeBuildTools() {
-  local   token="$1"; shift
-  local version="$1"; shift
-
-  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
-
-  # shellcheck disable=SC1090
-  . <(curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o - )
-}
