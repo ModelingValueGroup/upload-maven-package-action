@@ -20,10 +20,11 @@ jobs:
         run: |
           set -x
           . functions.sh  1>&2
+          echo "#dry" > dry.sh
           out="$(DRY=echo main \
             "ModelingValueGroup/buildTools" \
             "${{ secrets.GITHUB_TOKEN }}" \
-            "buildTools.sh" \
+            "dry.sh" \
             "com.modelingvalue:buildTools:sh:0.0" \
             "")"
           exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=com.modelingvalue -DartifactId=buildTools -Dversion=0.0 -Dpackaging=sh0 -DrepositoryId=github -Dfile=buildTools.sh -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
