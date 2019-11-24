@@ -15,11 +15,17 @@ jobs:
             xmlstarlet \
             jq \
             maven
-          export DRY=echo
           . functions.sh  1>&2
-          main \
+          exp="not yet known"
+          out="$(DRY=echo main \
             "$GITHUB_REPOSITORY" \
             "${{ secrets.GITHUB_TOKEN }}" \
             "README.md" \
             "aa:bb:md:1.0" \
-            ""
+            "")"
+          if [[ "$out" != "$exp" ]]; then
+            echo "::error::test failed"
+            echo "::error::    expected: $exp"
+            echo "::error::    output  : $out"
+            exit 44
+          fi
