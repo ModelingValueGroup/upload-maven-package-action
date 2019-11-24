@@ -63,8 +63,6 @@ includeBuildTools() {
 
   local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
 
-curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o - | sed 's/^/@@@ /' 1>&2 # TODO remove me
-
   # shellcheck disable=SC1090
   . <(curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o - )
 }
