@@ -36,9 +36,16 @@ main() (
   local g a v e
   gave2vars "$file" "$pom" "$gave"
 
-( listPackageVersions "$g" "$a" "$token"
+(
+  set +ue
   echo ==========
-  listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; echo $?
+  listPackageVersions "$g" "$a" "$token"
+  echo ==========
+  listPackageVersions "$g" "$a" "$token" | grep -Fx "$v"
+  echo $?
+  echo ==========
+  listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"
+  echo $?
   echo ==========
   listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v" && echo ja || echo nee
   echo ==========
