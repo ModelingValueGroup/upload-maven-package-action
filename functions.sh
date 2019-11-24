@@ -9,7 +9,7 @@ main() (
   local        gave="$1"; shift
   local         pom="$1"; shift
 
-  includeBuildTools "$token" "1.0.2"
+  includeBuildTools "$token" "1.0.4"
 
   local githubPackageUrl="https://maven.pkg.github.com/$githubRepos"
 
