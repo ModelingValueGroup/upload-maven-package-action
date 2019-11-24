@@ -37,7 +37,11 @@ main() (
   gave2vars "$file" "$pom" "$gave"
 
 ( listPackageVersions "$g" "$a" "$token"
+  echo ==========
+  listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; echo $?
+  echo ==========
   listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v" && echo ja || echo nee
+  echo ==========
 ) | sed 's/^/@@@ /' 1>&2 #TODO
 
   if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; then
