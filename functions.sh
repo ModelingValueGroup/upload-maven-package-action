@@ -4,14 +4,19 @@
 ########################################################################################
 main() (
   (
-    echo "::group:: debugging" # TODO remove group, only for debug
+    echo "::group:: debugging"
     (
       set -x
+      pwd
+      ls -la
       df -h
-      ls -la /mnt /mnt/* /run /run/*
+      echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+      ls -la "$GITHUB_WORKSPACE"
+      echo aap > "$GITHUB_WORKSPACE/aap" || :
+      ls -la "$GITHUB_WORKSPACE"
     ) | sed 's/^/@@@ /'
     echo "::endgroup::"
-  ) 1>&2
+  ) 1>&2  || : # TODO remove group, only for debug
 
   local githubRepos="$1"; shift
   local       token="$1"; shift
