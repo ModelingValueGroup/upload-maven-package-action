@@ -36,7 +36,7 @@ main() (
   local g a v e
   gave2vars "$file" "$pom" "$gave"
 
-  if listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; then
+  if [[ "${DRY:-}" == "" ]] && listPackageVersions "$g" "$a" "$token" | grep -Fxq "$v"; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$g" "$a" "$token")]"
     exit 99
   fi
