@@ -34,6 +34,8 @@ main() (
   fi
 
   ### check if this version is already uploaded
+  export g a v e
+  gave2vars "$gave" "$pom" "$file"
   if [[ "${DRY:-}" == "" ]] && listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | grep -Fx "$v" &> /dev/null; then
     echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
     exit 99
