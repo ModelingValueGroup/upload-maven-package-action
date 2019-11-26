@@ -5,7 +5,6 @@ LABEL "com.github.actions.name"="upload maven package"
 LABEL "com.github.actions.description"="upload a file as a maven package to the github package registry"
 
 RUN	apk add --no-cache \
-  java       \
   bash       \
   xmlstarlet \
   jq         \
