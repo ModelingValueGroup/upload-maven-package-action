@@ -1,5 +1,17 @@
 Just to remember...
 
+action.yml:
+        name: 'Example'
+        description: 'Example of running shell script without docker'
+        author: 'Tom Brus'
+        inputs:
+          whatever:
+            description: 'some arg'
+            required: true
+        runs:
+          using: 'node12'
+          main: 'start.js'
+
 start.js:
         const spawn = require('child_process').spawn;
         const path = require("path");
@@ -22,15 +34,3 @@ start.js:
 
 start.sh:
         # just your regular bash script
-
-action.yml:
-        name: 'Example'
-        description: 'Example of running shell script without docker'
-        author: 'Tom Brus'
-        inputs:
-          whatever:
-            description: 'some arg'
-            required: true
-        runs:
-          using: 'node12'
-          main: 'start.js'

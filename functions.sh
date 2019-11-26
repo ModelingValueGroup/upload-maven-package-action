@@ -18,7 +18,7 @@ main() (
   local  gave="$1"; shift
   local   pom="$1"; shift
 
-  includeBuildTools "$token" "1.0.6"
+  includeBuildTools "$token" "1.0.25"
 
   ### check arguments
   if [[ ! -f "$file" ]]; then

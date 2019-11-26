@@ -13,8 +13,13 @@ inputs:
     description: 'the group id, artifact id, version and extension(packaging), separated by colons (taken from pom if absent)'
     required: false
   pom:
-    description: 'the filename of the p[om.xml file (defaults to pom.xml'
+    description: 'the filename of the p[om.xml file (defaults to pom.xml)'
     required: false
+    default: "pom.xml"
+  trace:
+    description: 'set this to "true" if you would like bash-tracing'
+    required: false
+    default: "false"
 
 runs:
   using: 'docker'
