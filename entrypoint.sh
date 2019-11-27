@@ -5,11 +5,7 @@ if [[ "$INPUT_TRACE" == "true" ]]; then
     set -x
 fi
 
-# this action repo exists on the client machine in:
-#    /home/runner/work/_actions/ModelingValueGroup/upload-maven-package-action/<branch>
-
-set
-find /home/runner
+. "$(dirname "${BASH_SOURCE[0]}")/functions.sh"
 
 main \
   "$INPUT_TOKEN" \
