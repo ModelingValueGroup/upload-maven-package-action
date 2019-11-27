@@ -23,4 +23,4 @@ inputs:
 
 runs:
   using: 'node12'
-  main : 'start.js'
+  main : 'entrypoint.js'
