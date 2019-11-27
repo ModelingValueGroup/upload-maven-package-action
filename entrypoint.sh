@@ -5,13 +5,10 @@ if [[ "$INPUT_TRACE" == "true" ]]; then
     set -x
 fi
 
-echo "pwd=$PWD"
-ls -la .
-ls -la ..
-exit
+# this action repo exists on the client machine in:
+#    /home/runner/work/_actions/ModelingValueGroup/upload-maven-package-action
 
-
-. /functions.sh
+. ../_actions/ModelingValueGroup/upload-maven-package-action/functions.sh
 
 main \
   "$INPUT_TOKEN" \
