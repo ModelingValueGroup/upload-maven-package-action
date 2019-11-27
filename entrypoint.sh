@@ -8,10 +8,8 @@ fi
 # this action repo exists on the client machine in:
 #    /home/runner/work/_actions/ModelingValueGroup/upload-maven-package-action/<branch>
 
-ls -l ../_actions/ModelingValueGroup/upload-maven-package-action/*
 set
-
-. ../_actions/ModelingValueGroup/upload-maven-package-action/*/functions.sh
+find /home/runner
 
 main \
   "$INPUT_TOKEN" \
