@@ -41,11 +41,6 @@ main() (
         exit 99
     fi
 
-echo "@@@@@@ JAVA_HOME=${JAVA_HOME:-HUH}" 1>&2 || : # TODO
-ls -la ${JAVA_HOME:-HUH}                  1>&2 || : # TODO
-
     # ## do the actual upload
     uploadArtifact "$token" "$gave" "$pom" "$file"
 )
-echo "@@@@@@ JAVA_HOME=${JAVA_HOME:-HUH}" 1>&2 || : # TODO
-ls -la ${JAVA_HOME:-HUH}                  1>&2 || : # TODO
