@@ -5,6 +5,11 @@ if [[ "$INPUT_TRACE" == "true" ]]; then
     set -x
 fi
 
+echo "pwd=$PWD"
+ls -la
+exit
+
+
 . /functions.sh
 
 main \
