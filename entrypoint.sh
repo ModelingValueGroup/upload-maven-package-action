@@ -6,7 +6,8 @@ if [[ "$INPUT_TRACE" == "true" ]]; then
 fi
 
 echo "pwd=$PWD"
-ls -la
+ls -la .
+ls -la ..
 exit
 
 
