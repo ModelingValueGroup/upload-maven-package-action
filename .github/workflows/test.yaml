@@ -16,13 +16,16 @@ jobs:
         with:
           java-version: 11
 
-      - name: "install packages"
-        run: |
-          sudo apt-get install -y \
-            bash \
-            xmlstarlet \
-            jq \
-            maven
+      - name: "get buildTools"
+        uses: ModelingValueGroup/buildTools@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "(re)generate some files"
+        run:  |
+          . <(java -jar buildTools.jar)
+          correctEols
+          correctHeaders header
 
       - name: "test"
         run: |
@@ -42,3 +45,21 @@ jobs:
             exit 44
           fi
           echo "ok"
+
+      - name: "push changes back to github"
+        run:  |
+          git ls-files --deleted --modified --others --exclude-standard || :
+          if [[ "$(git ls-files --deleted --modified --others --exclude-standard)" ]]; then
+            echo "changes need to be pushed back to github"
+
+            echo "::group::git commit and push"
+              git config user.email "automation@modelingvalue.com"
+              git config user.name "$GITHUB_ACTOR"
+              git add .
+              git commit -m "adjusted files [by github actions]"
+              git push "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
+            echo "::endgroup::"
+
+          else
+            echo "no changes need to be pushed back to github"
+          fi
