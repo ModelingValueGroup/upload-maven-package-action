@@ -20,7 +20,7 @@ includeBuildTools() {
   local   token="$1"; shift
   local version="$1"; shift
 
-  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.jar"
+  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/org.modelingvalue.buildTools/$version/buildTools-$version.jar"
 
   curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools-tmp.jar
   . <(java -jar buildTools-tmp.jar)
