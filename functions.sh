@@ -6,11 +6,11 @@ includeBuildTools() {
   local   token="$1"; shift
   local version="$1"; shift
 
-  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.sh"
+  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/com.modelingvalue.buildTools/$version/buildTools-$version.jar"
 
-  curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools-tmp.sh
-  . buildTools-tmp.sh
-  rm buildTools-tmp.sh
+  curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools-tmp.jar
+  . <(java -jar buildTools-tmp.jar)
+  rm buildTools-tmp.jar
 }
 main() (
     local token="$1"; shift
@@ -18,7 +18,7 @@ main() (
     local  gave="$1"; shift
     local   pom="$1"; shift
 
-    includeBuildTools "$token" "1.0.25"
+    includeBuildTools "$token" "1.0.30"
 
     ### check arguments
     if [[ ! -f "$file" ]]; then
