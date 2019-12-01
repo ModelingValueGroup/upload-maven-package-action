@@ -17,20 +17,22 @@
 ########################################################################################
 ########################################################################################
 includeBuildTools() {
-  local   token="$1"; shift
-  local version="$1"; shift
+    local   token="$1"; shift
+    local version="$1"; shift
 
-  local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/org.modelingvalue.buildTools/$version/buildTools-$version.jar"
+    local buildToolsUrl="https://maven.pkg.github.com/ModelingValueGroup/buildTools/org.modelingvalue.buildTools/$version/buildTools-$version.jar"
 
-  curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools-tmp.jar
-  . <(java -jar buildTools-tmp.jar)
-  rm buildTools-tmp.jar
+    curl -s -H "Authorization: bearer $token" -L "$buildToolsUrl" -o buildTools-tmp.jar
+    . <(java -jar buildTools-tmp.jar)
+    rm buildTools-tmp.jar
 }
 main() (
     local token="$1"; shift
     local  file="$1"; shift
     local  gave="$1"; shift
     local   pom="$1"; shift
+
+    local extras=("" "-sources" "-javadoc")
 
     includeBuildTools "$token" "1.0.30"
 
@@ -47,14 +49,26 @@ main() (
         pom=pom.xml
     fi
 
-    ### check if this version is already uploaded
     export g a v e
     gave2vars "$gave" "$pom" "$file"
-    if [[ "${DRY:-}" == "" ]] && listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | grep -Fx "$v" &> /dev/null; then
-        echo "::error::version $v is already published as a package. Existing versions: [$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gave" "$pom" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
-        exit 99
+    local gg="$g"
+    local aa="$a"
+    local vv="$v"
+    local ee="$e"
+
+    if [[ "${DRY:-}" == "" ]]; then
+        ### check if one of these versions is already uploaded:
+        for extra in "${extras[@]}"; do
+            if listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa$extra:$vv:$ee" "" | grep -Fx "$v" &> /dev/null; then
+                echo "::error::version $v is already published as a package for artifact $aa$extra. Existing versions: [$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa$extra:$vv:$ee" "" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
+                exit 99
+            fi
+        done
     fi
 
-    # ## do the actual upload
-    uploadArtifact "$token" "$gave" "$pom" "$file"
+    ### do the actual uploads:
+    for extra in "${extras[@]}"; do
+        local f="${file%.*}$extra.${file##*.}"
+        uploadArtifact "$token" "$gg:$aa$extra:$vv:$ee" "$pom" "$f"
+    done
 )
