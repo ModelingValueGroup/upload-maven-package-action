@@ -51,7 +51,7 @@ jobs:
               exit 44
             fi
           done
-          rm dry.pack
+          rm dry.pack dry-javadoc.pack
           echo "all ok"
 
       - name: "push changes back to github"
