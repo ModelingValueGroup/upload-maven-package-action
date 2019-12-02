@@ -35,13 +35,13 @@ jobs:
           set -euo pipefail
           . functions.sh  1>&2
           echo "#dry" > dry.pack
+          echo "#dry" > dry-javadoc.pack
           mapfile -t out < <(DRY=echo main "${{ secrets.GITHUB_TOKEN }}" "dry.pack" "mygroup:myartifact:0.0:pack" "")
           exp=(
             "mvn -B -s settings.xml deploy:deploy-file -DgroupId=mygroup -DartifactId=myartifact -Dversion=0.0 -Dpackaging=pack -DrepositoryId=github -Dfile=dry.pack -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
-            "mvn -B -s settings.xml deploy:deploy-file -DgroupId=mygroup -DartifactId=myartifact-sources -Dversion=0.0 -Dpackaging=pack -DrepositoryId=github -Dfile=dry-sources.pack -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
             "mvn -B -s settings.xml deploy:deploy-file -DgroupId=mygroup -DartifactId=myartifact-javadoc -Dversion=0.0 -Dpackaging=pack -DrepositoryId=github -Dfile=dry-javadoc.pack -DpomFile= -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action"
           )
-          for i in 0 1 2; do
+          for i in 0 1; do
             if [[ "${out[$i]}" == "${exp[$i]}" ]]; then
               echo "... line $i: ok"
             else
