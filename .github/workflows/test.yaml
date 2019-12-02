@@ -18,6 +18,7 @@ jobs:
 
       - name: "get generic info"
         uses: ModelingValueGroup/generic-info@master
+
       - name: "get buildTools"
         uses: ModelingValueGroup/buildTools@master
         with:
