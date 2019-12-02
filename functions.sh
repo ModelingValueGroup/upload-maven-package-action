@@ -69,6 +69,8 @@ main() (
     ### do the actual uploads:
     for extra in "${extras[@]}"; do
         local f="${file%.*}$extra.${file##*.}"
-        uploadArtifact "$token" "$gg:$aa$extra:$vv:$ee" "$pom" "$f"
+        if [[ -f "$f" ]]; then
+           uploadArtifact "$token" "$gg:$aa$extra:$vv:$ee" "$pom" "$f"
+        fi
     done
 )
