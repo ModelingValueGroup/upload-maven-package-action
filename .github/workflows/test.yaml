@@ -33,21 +33,9 @@ jobs:
       - name: "test"
         run: |
           set -euo pipefail
+          . <(java -jar buildTools.jar)
           . functions.sh  1>&2
-          echo "#dry" > dry.jar
-          echo "#dry" > dry-sources.jar
-          echo "#dry" > dry-javadoc.jar
-
-          out="$(DRY=echo main "${{ secrets.GITHUB_TOKEN }}" dry.jar "mygroup:myartifact:0.0:jar" "")"
-          exp="mvn -B -s settings.xml deploy:deploy-file -DgroupId=mygroup -DartifactId=myartifact -Dversion=0.0 -Dpackaging=jar -DrepositoryId=github -Durl=https://maven.pkg.github.com/ModelingValueGroup/upload-maven-package-action -Dfile=dry.jar -Dsources=dry-sources.jar -Djavadoc=dry-javadoc.jar"
-
-          if [[ "$out" != "$exp" ]]; then
-            echo "::error::test failed"
-            echo "::error::    expected: $exp"
-            echo "::error::    output  : $out"
-            exit 44
-          fi
-          rm dry.jar dry-sources.jar dry-javadoc.jar
+          runUploadArtifactTest "tst.modelingvalue" "upload" "${{ secrets.GITHUB_TOKEN }}"
           echo "all ok"
 
       - name: "push changes back to github"

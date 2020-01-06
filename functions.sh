@@ -14,11 +14,6 @@
 ##     Arjan Kok, Carel Bast                                                                                           ~
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-########################################################################################
-########################################################################################
-export sourcesExtra="-sources"
-export javadocExtra="-javadoc"
-########################################################################################
 includeBuildTools() {
     local   token="$1"; shift
     local version="$1"; shift
@@ -29,35 +24,18 @@ includeBuildTools() {
     . <(java -jar buildTools-tmp.jar)
     rm buildTools-tmp.jar
 }
-getSourcesName() {
-    local  file="$1"; shift
-
-    printf "%s" "${file%.*}$sourcesExtra.${file##*.}"
-}
-getJavadocName() {
-    local  file="$1"; shift
-
-    printf "%s" "${file%.*}$javadocExtra.${file##*.}"
-}
 main() (
     local token="$1"; shift
     local  file="$1"; shift
     local  gave="$1"; shift
     local   pom="$1"; shift
 
-    includeBuildTools "$token" "1.2.1"
+    includeBuildTools "$token" "1.2.2"
 
     ### check arguments
     if [[ ! -f "$file" ]]; then
         echo "::error:: file not found: $file"
         exit 99
-    fi
-    local files=("$file")
-    if [[ -f    "$(getSourcesName "$file")" ]]; then
-        files+=("$(getSourcesName "$file")")
-    fi
-    if [[ -f    "$(getJavadocName "$file")" ]]; then
-        files+=("$(getJavadocName "$file")")
     fi
 
     ### determine pom file if it can be found...
@@ -76,16 +54,14 @@ main() (
     local vv="$v"
     local ee="$e"
 
-    if [[ "${DRY:-}" == "" ]]; then # only do not do this when dry-testing, since the test packages are likely non-existent
-        ### check if this versions is already uploaded:
-        if listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa:$vv:$ee" "" | grep -Fx "$v" &> /dev/null; then
-            local versionList
-            versionList="[$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa:$vv:$ee" "" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
-            echo "::error::version $v is already published as a package for artifact $aa. Existing versions: $versionList"
-            exit 99
-        fi
+    ### check if this versions is already uploaded:
+    if listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa:$vv:$ee" "" | grep -Fx "$v" &> /dev/null; then
+        local versionList
+        versionList="[$(listPackageVersions "$token" "$GITHUB_REPOSITORY" "$gg:$aa:$vv:$ee" "" | tr '\n' ',' | sed 's/,$//;s/,/, /g')]"
+        echo "::error::version $v is already published as a package for artifact $aa. Existing versions: $versionList"
+        exit 99
     fi
 
     ### do the actual upload:
-   uploadArtifactQuick "$token" "$gg:$aa:$vv:$ee" "$pom" "${files[@]}"
+    uploadArtifactQuick "$token" "$gg" "$aa" "$vv" "$pom" "$file"
 )
