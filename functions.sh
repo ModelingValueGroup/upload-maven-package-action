@@ -87,5 +87,5 @@ main() (
     fi
 
     ### do the actual upload:
-   uploadArtifact "$token" "$gg:$aa:$vv:$ee" "$pom" "${files[@]}"
+   uploadArtifactQuick "$token" "$gg:$aa:$vv:$ee" "$pom" "${files[@]}"
 )
