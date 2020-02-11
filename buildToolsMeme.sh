@@ -36,7 +36,7 @@ includeBuildTools() {
 
     ##########################################################################################################################
     # we do not have the 'lastPackageVersion' function yet, so we first load a known version here....
-    includeBuildToolsVersion "$token" "2.0.3"
+    includeBuildToolsVersion "$token" "2.0.4"
     # ...and then overwrite it with the latest:
     includeBuildToolsVersion "$token" "$(lastPackageVersion "$token" "ModelingValueGroup/buildTools" "org.modelingvalue" "buildTools")"
 }
