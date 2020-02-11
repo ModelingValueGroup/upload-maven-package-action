@@ -23,7 +23,11 @@ includeBuildToolsVersion() {
     local url="https://maven.pkg.github.com/ModelingValueGroup/buildTools/org.modelingvalue.buildTools/$version/buildTools-$version.jar"
 
     curl -s -H "Authorization: bearer $token" -L "$url" -o "buildTools.jar"
-    file "buildTools.jar"
+    if [[ "$(file "buildTools.jar")" == "ASCII text" ]]; then
+        echo "::error::could not download buildTools jar from: $url"
+        sed 's/^/    /' "buildTools.jar"
+        exit 91
+    fi
     . <(java -jar "buildTools.jar")
     echo "INFO: installed buildTools version $version"
 }
