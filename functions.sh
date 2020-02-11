@@ -20,8 +20,6 @@ main() (
     local  gave="$1"; shift
     local   pom="$1"; shift
 
-    includeBuildTools "$token" "$buildToolsVersion"
-
     ### check arguments
     if [[ ! -f "$file" ]]; then
         echo "::error:: file not found: $file"
