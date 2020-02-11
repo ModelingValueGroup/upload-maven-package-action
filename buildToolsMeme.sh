@@ -33,12 +33,10 @@ includeBuildToolsVersion() {
 }
 includeBuildTools() {
     local   token="$1"; shift
+    local version="${1:-}"
 
-    ##########################################################################################################################
-    # we do not have the 'lastPackageVersion' function yet, so we first load a known version here....
-    includeBuildToolsVersion "$token" "2.0.4"
-    # ...and then overwrite it with the latest:
-    includeBuildToolsVersion "$token" "$(lastPackageVersion "$token" "ModelingValueGroup/buildTools" "org.modelingvalue" "buildTools")"
+    includeBuildToolsVersion "$token" "${version:-2.0.0}"
+    if [[ "${version}" == "" ]]; then
+        includeBuildToolsVersion "$token" "$(lastPackageVersion "$token" "ModelingValueGroup/buildTools" "org.modelingvalue" "buildTools")"
+    fi
 }
-
-includeBuildTools "$INPUT_TOKEN"
