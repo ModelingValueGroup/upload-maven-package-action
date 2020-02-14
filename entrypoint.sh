@@ -16,7 +16,14 @@
 
 set -euo pipefail
 
-[[ "${INPUT_TRACE:-}" == "true" ]] && set -x
+if [[ "${INPUT_TRACE:-false}" == "true" ]]; then
+    # shellcheck disable=SC2207
+    INPUT_VARS=( $(env | grep '^INPUT_' | sed 's/^INPUT_//;s/=.*//' | sort) )
+    for name in "${INPUT_VARS[@]}"; do
+        printf "# %16s = %s\n" "$name" "$(eval "echo \${INPUT_$name:-}")"
+    done
+    set -x
+fi
 
 . "$(dirname "${BASH_SOURCE[0]}")/buildToolsMeme.sh" "$INPUT_TOKEN"
 . "$(dirname "${BASH_SOURCE[0]}")/functions.sh"
