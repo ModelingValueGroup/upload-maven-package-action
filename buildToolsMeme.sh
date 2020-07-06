@@ -46,4 +46,4 @@ if [[ "${1:-}" == "" ]]; then
     echo "::error::no token passed to buildToolsMeme.sh"
     exit 56
 fi
-includeBuildTools "$1" "2.2.3"
+includeBuildTools "$1" "${2:-}"
