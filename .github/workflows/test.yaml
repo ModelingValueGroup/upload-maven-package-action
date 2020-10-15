@@ -19,27 +19,27 @@ jobs:
       - name: "get generic info"
         uses: ModelingValueGroup/generic-info@master
 
-      - name: "get buildTools"
-        uses: ModelingValueGroup/buildTools@master
+      - name: "get buildtools"
+        uses: ModelingValueGroup/buildtools@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "(re)generate some files"
         run:  |
-          . <(java -jar ~/buildTools.jar)
+          . <(java -jar ~/buildtools.jar)
           correctEols
           correctHeaders header
 
       - name: "test"
         run: |
           set -euo pipefail
-          . <(java -jar ~/buildTools.jar)
+          . <(java -jar ~/buildtools.jar)
           . functions.sh  1>&2
           runUploadArtifactTest "tst.modelingvalue" "upload" "${{ secrets.GITHUB_TOKEN }}"
           echo "all ok"
 
       - name: "push changes back to github"
         run:  |
-          . <(java -jar ~/buildTools.jar)
+          . <(java -jar ~/buildtools.jar)
           pushBackToGithub "${{ secrets.GITHUB_TOKEN }}" "automation@modelingvalue.com" "adjusted files [by github actions]"
 
