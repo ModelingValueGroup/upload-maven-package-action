@@ -35,7 +35,7 @@ jobs:
           set -euo pipefail
           . <(java -jar ~/buildtools.jar)
           . functions.sh  1>&2
-          runUploadArtifactTest "tst.modelingvalue" "upload" "${{ secrets.REPO_AND_PACKAGES_TOKEN }}"
+          runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test" "${{ secrets.REPO_AND_PACKAGES_TOKEN }}"
           echo "all ok"
 
       - name: "push changes back to github"
