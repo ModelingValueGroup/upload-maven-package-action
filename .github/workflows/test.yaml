@@ -21,14 +21,17 @@ jobs:
 
       - name: "get buildtools"
         uses: ModelingValueGroup/buildtools@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "(re)generate some files"
         run:  |
           . <(java -jar ~/buildtools.jar)
           correctEols
           correctHeaders header
+
+      - name: "push changes back to github"
+        run: |
+          . <(java -jar ~/buildtools.jar)
+          pushBackToGithub "${{ secrets.GITHUB_TOKEN }}" "automation@modelingvalue.com" "adjusted files [by github actions]"
 
       - name: "test"
         run: |
@@ -37,9 +40,3 @@ jobs:
           . functions.sh  1>&2
           runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test" "${{ secrets.REPO_AND_PACKAGES_TOKEN }}"
           echo "all ok"
-
-      - name: "push changes back to github"
-        run:  |
-          . <(java -jar ~/buildtools.jar)
-          pushBackToGithub "${{ secrets.GITHUB_TOKEN }}" "automation@modelingvalue.com" "adjusted files [by github actions]"
-

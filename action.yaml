@@ -1,4 +1,3 @@
-#!/bin/bash
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ## (C) Copyright 2018-2019 Modeling Value Group B.V. (http://modelingvalue.org)                                        ~
 ##                                                                                                                     ~
@@ -14,22 +13,39 @@
 ##     Arjan Kok, Carel Bast                                                                                           ~
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-set -euo pipefail
+name: 'upload-maven-package-action'
+description: 'upload a file as a maven package to the github package registry'
+author: 'Tom Brus'
 
-if [[ "${INPUT_TRACE:-false}" == "true" ]]; then
-    # shellcheck disable=SC2207
-    INPUT_VARS=( $(env | grep '^INPUT_' | sed 's/^INPUT_//;s/=.*//' | sort) )
-    for name in "${INPUT_VARS[@]}"; do
-        printf "# %16s = %s\n" "$name" "$(eval "echo \${INPUT_$name:-}")"
-    done
-    set -x
-fi
+inputs:
+  file:
+    description: 'the file to upload'
+    required: true
+  gave:
+    description: 'the group id, artifact id, version and extension(packaging), separated by colons (taken from pom if absent)'
+    required: false
+  pom:
+    description: 'the filename of the p[om.xml file (defaults to pom.xml)'
+    required: false
+    default: "pom.xml"
+  trace:
+    description: 'set this to "true" if you would like bash-tracing'
+    required: false
+    default: "false"
 
-. "$(dirname "${BASH_SOURCE[0]}")/buildtoolsMeme.sh" "$INPUT_TOKEN"
-. "$(dirname "${BASH_SOURCE[0]}")/functions.sh"
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        set -euo pipefail
+        [[ "${{inputs.trace}}" == "true" ]] && set -x
 
-main \
-  "$INPUT_TOKEN" \
-  "$INPUT_FILE"  \
-  "$INPUT_GAVE"  \
-  "$INPUT_POM"
+        . "${{github.action_path}}/buildtoolsMeme.sh" "${{github.token}}" ""
+        . "${{github.action_path}}/functions.sh"
+
+        main \
+          "${{github.token}}" \
+          "${{inputs.file}}" \
+          "${{inputs.gave}}" \
+          "${{inputs.pom}}"
