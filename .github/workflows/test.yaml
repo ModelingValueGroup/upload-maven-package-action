@@ -4,6 +4,8 @@ on:
 jobs:
   build:
     runs-on: [ubuntu-latest]
+    env:
+      GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
     steps:
       - name: "checkout"
         uses: actions/checkout@v1
@@ -31,12 +33,12 @@ jobs:
       - name: "push changes back to github"
         run: |
           . <(java -jar ~/buildtools.jar)
-          pushBackToGithub "${{ secrets.GITHUB_TOKEN }}" "automation@modelingvalue.com" "adjusted files [by github actions]"
+          pushBackToGithub
 
       - name: "test"
         run: |
           set -euo pipefail
           . <(java -jar ~/buildtools.jar)
           . functions.sh  1>&2
-          runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test" "${{ secrets.REPO_AND_PACKAGES_TOKEN }}"
+          runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test" "${{secrets.REPO_AND_PACKAGES_TOKEN}}"
           echo "all ok"
