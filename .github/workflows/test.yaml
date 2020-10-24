@@ -3,9 +3,10 @@ on:
   push
 jobs:
   build:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-20.04
     env:
       GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+      ALLREP_TOKEN: "${{secrets.ALLREP_TOKEN}}"
     steps:
       - name: "checkout"
         uses: actions/checkout@v1
@@ -40,5 +41,5 @@ jobs:
           set -euo pipefail
           . <(java -jar ~/buildtools.jar)
           . functions.sh  1>&2
-          runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test" "${{secrets.REPO_AND_PACKAGES_TOKEN}}"
+          runUploadArtifactTest "tmp.modelingvalue" "upload-maven-package-action-test"
           echo "all ok"
